@@ -21,20 +21,20 @@ public class AsyncProducer implements DemoRunner {
 
     private RocketmqProperties rocketmqProperties;
 
-    public AsyncProducer(RocketmqProperties rocketmqProperties) {
+    @Override
+    public void setRocketmqProperties(RocketmqProperties rocketmqProperties) {
         this.rocketmqProperties = rocketmqProperties;
     }
 
     @Override
     public void run() throws Exception {
         // 实例化消息生产者Producer
-        DefaultMQProducer producer = new DefaultMQProducer("ASYNC_PRODUCE");
+        DefaultMQProducer producer = new DefaultMQProducer("AsyncProducer");
         // 设置NameServer的地址
         producer.setNamesrvAddr(rocketmqProperties.getNamesrvAddr());
         // 启动Producer实例
         producer.start();
         producer.setRetryTimesWhenSendAsyncFailed(0);
-
         int messageCount = 100;
         // 根据消息数量实例化倒计时计算器
         final CountDownLatch2 countDownLatch = new CountDownLatch2(messageCount);

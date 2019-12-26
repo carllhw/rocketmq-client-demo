@@ -14,14 +14,15 @@ public class OnewayProducer implements DemoRunner {
 
     private RocketmqProperties rocketmqProperties;
 
-    public OnewayProducer(RocketmqProperties rocketmqProperties) {
+    @Override
+    public void setRocketmqProperties(RocketmqProperties rocketmqProperties) {
         this.rocketmqProperties = rocketmqProperties;
     }
 
     @Override
     public void run() throws Exception {
         // 实例化消息生产者Producer
-        DefaultMQProducer producer = new DefaultMQProducer("ONEWAY_PRODUCER");
+        DefaultMQProducer producer = new DefaultMQProducer("OnewayProducer");
         // 设置NameServer的地址
         producer.setNamesrvAddr(rocketmqProperties.getNamesrvAddr());
         // 启动Producer实例

@@ -6,6 +6,7 @@ import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.apache.rocketmq.client.producer.SendResult;
 import org.apache.rocketmq.common.message.Message;
 import org.apache.rocketmq.remoting.common.RemotingHelper;
+import org.springframework.stereotype.Component;
 
 /**
  * sync producer runner
@@ -13,11 +14,13 @@ import org.apache.rocketmq.remoting.common.RemotingHelper;
  * @author carllhw
  */
 @Slf4j
+@Component
 public class SyncProducer implements DemoRunner {
 
     private RocketmqProperties rocketmqProperties;
 
-    public SyncProducer(RocketmqProperties rocketmqProperties) {
+    @Override
+    public void setRocketmqProperties(RocketmqProperties rocketmqProperties) {
         this.rocketmqProperties = rocketmqProperties;
     }
 

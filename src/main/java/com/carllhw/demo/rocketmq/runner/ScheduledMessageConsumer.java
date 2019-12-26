@@ -5,14 +5,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
 import org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently;
+import org.apache.rocketmq.common.message.MessageExt;
 
 /**
- * consumer
+ * scheduled message consumer
  *
  * @author carllhw
  */
 @Slf4j
-public class Consumer implements DemoRunner {
+public class ScheduledMessageConsumer implements DemoRunner {
 
     private RocketmqProperties rocketmqProperties;
 
@@ -24,19 +25,21 @@ public class Consumer implements DemoRunner {
     @Override
     public void run() throws Exception {
         // 实例化消费者
-        DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("Consumer");
+        DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("ScheduledMessageConsumer");
         // 设置NameServer的地址
         consumer.setNamesrvAddr(rocketmqProperties.getNamesrvAddr());
-        // 订阅一个或者多个Topic，以及Tag来过滤需要消费的消息
+        // 订阅Topics
         consumer.subscribe("TOPIC_TEST", "*");
-        // 注册回调实现类来处理从broker拉取回来的消息
-        consumer.registerMessageListener((MessageListenerConcurrently) (msgs, context) -> {
-            log.info("{} receive new messages: {}", Thread.currentThread().getName(), msgs);
-            // 标记该消息已经被成功消费
+        // 注册消息监听者
+        consumer.registerMessageListener((MessageListenerConcurrently) (messages, context) -> {
+            for (MessageExt message : messages) {
+                // Print approximate delay time period
+                log.info("Receive message[msgId={}] {}ms later", message.getMsgId(),
+                        (System.currentTimeMillis() - message.getBornTimestamp()));
+            }
             return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
         });
-        // 启动消费者实例
+        // 启动消费者
         consumer.start();
-        log.info("Consumer started");
     }
 }
