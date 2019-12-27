@@ -4,6 +4,8 @@ import com.carllhw.demo.rocketmq.autoconfigure.RocketmqProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.apache.rocketmq.common.message.Message;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * scheduled message producer
@@ -11,11 +13,12 @@ import org.apache.rocketmq.common.message.Message;
  * @author carllhw
  */
 @Slf4j
+@Component
 public class ScheduledMessageProducer implements DemoRunner {
 
     private RocketmqProperties rocketmqProperties;
 
-    @Override
+    @Autowired
     public void setRocketmqProperties(RocketmqProperties rocketmqProperties) {
         this.rocketmqProperties = rocketmqProperties;
     }

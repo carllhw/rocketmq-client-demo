@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
 import org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * consumer
@@ -12,11 +14,12 @@ import org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently;
  * @author carllhw
  */
 @Slf4j
+@Component
 public class Consumer implements DemoRunner {
 
     private RocketmqProperties rocketmqProperties;
 
-    @Override
+    @Autowired
     public void setRocketmqProperties(RocketmqProperties rocketmqProperties) {
         this.rocketmqProperties = rocketmqProperties;
     }

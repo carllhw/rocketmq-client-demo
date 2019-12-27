@@ -10,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.apache.rocketmq.client.producer.SendResult;
 import org.apache.rocketmq.common.message.Message;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * producer in order
@@ -17,11 +19,12 @@ import org.apache.rocketmq.common.message.Message;
  * @author carllhw
  */
 @Slf4j
+@Component
 public class ProducerInOrder implements DemoRunner {
 
     private RocketmqProperties rocketmqProperties;
 
-    @Override
+    @Autowired
     public void setRocketmqProperties(RocketmqProperties rocketmqProperties) {
         this.rocketmqProperties = rocketmqProperties;
     }

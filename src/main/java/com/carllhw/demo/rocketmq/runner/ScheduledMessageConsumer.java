@@ -6,6 +6,8 @@ import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
 import org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently;
 import org.apache.rocketmq.common.message.MessageExt;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * scheduled message consumer
@@ -13,11 +15,12 @@ import org.apache.rocketmq.common.message.MessageExt;
  * @author carllhw
  */
 @Slf4j
+@Component
 public class ScheduledMessageConsumer implements DemoRunner {
 
     private RocketmqProperties rocketmqProperties;
 
-    @Override
+    @Autowired
     public void setRocketmqProperties(RocketmqProperties rocketmqProperties) {
         this.rocketmqProperties = rocketmqProperties;
     }

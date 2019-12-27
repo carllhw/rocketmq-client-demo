@@ -6,6 +6,7 @@ import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.apache.rocketmq.client.producer.SendResult;
 import org.apache.rocketmq.common.message.Message;
 import org.apache.rocketmq.remoting.common.RemotingHelper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -19,7 +20,7 @@ public class SyncProducer implements DemoRunner {
 
     private RocketmqProperties rocketmqProperties;
 
-    @Override
+    @Autowired
     public void setRocketmqProperties(RocketmqProperties rocketmqProperties) {
         this.rocketmqProperties = rocketmqProperties;
     }
