@@ -1,9 +1,10 @@
 package com.carllhw.demo.rocketmq.runner;
 
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.carllhw.demo.rocketmq.autoconfigure.RocketmqProperties;
-import com.carllhw.demo.rocketmq.util.Constants;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.apache.rocketmq.client.producer.SendResult;
@@ -12,13 +13,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * sync producer runner
+ * batch producer
  *
  * @author carllhw
  */
 @Slf4j
 @Component
-public class SyncProducer implements DemoRunner {
+public class BatchProducer implements DemoRunner {
 
     private RocketmqProperties rocketmqProperties;
 
@@ -30,20 +31,24 @@ public class SyncProducer implements DemoRunner {
     @Override
     public void run() throws Exception {
         // 实例化消息生产者Producer
-        DefaultMQProducer producer = new DefaultMQProducer("SYNC_PRODUCE");
+        DefaultMQProducer producer = new DefaultMQProducer("BATCH_PRODUCE");
         // 设置NameServer的地址
         producer.setNamesrvAddr(rocketmqProperties.getNamesrvAddr());
         // 启动Producer实例
         producer.start();
-        for (int i = 0; i < Constants.Digital.ONE_HUNDRED; i++) {
-            // 创建消息，并指定Topic，Tag和消息体
-            Message msg = new Message("TOPIC_TEST", "TagA",
-                    ("Hello RocketMQ " + i).getBytes(StandardCharsets.UTF_8));
-            msg.putUserProperty("a", String.valueOf(i));
-            // 发送消息到一个Broker
-            SendResult sendResult = producer.send(msg);
-            // 通过sendResult返回消息是否成功送达
-            log.info("{}", sendResult);
+        String topic = "TOPIC_TEST";
+        List<Message> messages = new ArrayList<>();
+        messages.add(new Message(topic, "TagA", "OrderID001", "Hello world 0".getBytes(
+                StandardCharsets.UTF_8)));
+        messages.add(new Message(topic, "TagA", "OrderID002", "Hello world 1".getBytes(
+                StandardCharsets.UTF_8)));
+        messages.add(new Message(topic, "TagA", "OrderID003", "Hello world 2".getBytes(
+                StandardCharsets.UTF_8)));
+        try {
+            SendResult sendResult = producer.send(messages);
+            log.info("{}", sendResult.getSendStatus());
+        } catch (Exception e) {
+            log.error("error", e);
         }
         // 如果不再发送消息，关闭Producer实例。
         producer.shutdown();

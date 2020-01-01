@@ -1,5 +1,7 @@
 package com.carllhw.demo.rocketmq.runner;
 
+import java.nio.charset.StandardCharsets;
+
 import com.carllhw.demo.rocketmq.autoconfigure.RocketmqProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
@@ -32,7 +34,8 @@ public class ScheduledMessageProducer implements DemoRunner {
         producer.start();
         int totalMessagesToSend = 100;
         for (int i = 0; i < totalMessagesToSend; i++) {
-            Message message = new Message("TOPIC_TEST", ("Hello scheduled message " + i).getBytes());
+            Message message = new Message("TOPIC_TEST", ("Hello scheduled message " + i).getBytes(
+                    StandardCharsets.UTF_8));
             message.setDelayTimeLevel(3);
             // 发送消息
             producer.send(message);

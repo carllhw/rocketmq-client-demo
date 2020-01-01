@@ -8,7 +8,7 @@
 		<version>2.2.2.RELEASE</version>
 	</parent>
 	<groupId>com.carllhw.demo</groupId>
-	<artifactId>rocketmq-demo</artifactId>
+	<artifactId>rocketmq-client-demo</artifactId>
 	<version>0.1.0-SNAPSHOT</version>
 	<name>rocketmq-demo</name>
 	<description>Demo project for rocketmq</description>

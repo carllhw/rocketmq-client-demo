@@ -1,11 +1,14 @@
 package com.carllhw.demo.rocketmq.runner;
 
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import com.carllhw.demo.rocketmq.autoconfigure.RocketmqProperties;
+import com.carllhw.demo.rocketmq.util.Constants;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.apache.rocketmq.client.producer.SendResult;
@@ -40,10 +43,11 @@ public class ProducerInOrder implements DemoRunner {
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String dateStr = sdf.format(date);
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < Constants.Digital.TEN; i++) {
             // 加个时间前缀
             String body = dateStr + " Hello RocketMQ " + orderList.get(i);
-            Message msg = new Message("TOPIC_TEST", tags[i % tags.length], "KEY" + i, body.getBytes());
+            Message msg = new Message("TOPIC_TEST", tags[i % tags.length], "KEY" + i, body.getBytes(
+                    StandardCharsets.UTF_8));
             SendResult sendResult = producer.send(msg, (mqs, msg1, arg) -> {
                 //根据订单id选择发送queue
                 Long id = (Long) arg;
@@ -59,40 +63,17 @@ public class ProducerInOrder implements DemoRunner {
     /**
      * 订单的步骤
      */
+    @Data
     private static class OrderStep {
         private long orderId;
         private String desc;
-
-        public long getOrderId() {
-            return orderId;
-        }
-
-        public void setOrderId(long orderId) {
-            this.orderId = orderId;
-        }
-
-        public String getDesc() {
-            return desc;
-        }
-
-        public void setDesc(String desc) {
-            this.desc = desc;
-        }
-
-        @Override
-        public String toString() {
-            return "OrderStep{" +
-                    "orderId=" + orderId +
-                    ", desc='" + desc + '\'' +
-                    '}';
-        }
     }
 
     /**
      * 生成模拟订单数据
      */
     private List<OrderStep> buildOrders() {
-        List<OrderStep> orderList = new ArrayList<OrderStep>();
+        List<OrderStep> orderList = new ArrayList<>();
 
         OrderStep orderDemo = new OrderStep();
         orderDemo.setOrderId(15103111039L);

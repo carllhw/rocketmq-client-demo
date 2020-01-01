@@ -1,5 +1,6 @@
 package com.carllhw.demo.rocketmq.runner;
 
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeUnit;
 
 import com.carllhw.demo.rocketmq.autoconfigure.RocketmqProperties;
@@ -9,7 +10,6 @@ import org.apache.rocketmq.client.producer.SendCallback;
 import org.apache.rocketmq.client.producer.SendResult;
 import org.apache.rocketmq.common.CountDownLatch2;
 import org.apache.rocketmq.common.message.Message;
-import org.apache.rocketmq.remoting.common.RemotingHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -45,7 +45,7 @@ public class AsyncProducer implements DemoRunner {
             final int index = i;
             // 创建消息，并指定Topic，Tag和消息体
             Message msg = new Message("TOPIC_TEST", "TagA", "OrderID188",
-                    "Hello world".getBytes(RemotingHelper.DEFAULT_CHARSET));
+                    "Hello world".getBytes(StandardCharsets.UTF_8));
             // SendCallback接收异步返回结果的回调
             producer.send(msg, new SendCallback() {
                 @Override
